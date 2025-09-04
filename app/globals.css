@@ -206,6 +206,48 @@ body::before {
   }
 }
 
+/* Easter Egg Animations */
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: translateX(-50%) translateY(-100px) scale(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(10px) scale(1.1);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* Keyboard Shortcut Hint Animation */
+@keyframes slide-hint {
+  0% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Loading Skeleton Animation */
 .skeleton {
   background: linear-gradient(
@@ -228,6 +270,65 @@ body::before {
   ring: 2px;
   ring-color: rgb(var(--color-primary));
   ring-offset: 2px;
+}
+
+/* Enhanced Focus Indicators for Accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid rgb(var(--color-primary));
+  outline-offset: 2px;
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: rgb(var(--color-primary));
+  color: white;
+  padding: 8px 16px;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+  z-index: 100;
+  transition: top var(--duration-fast) var(--ease-in-out);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Scrollbar Styles */
@@ -257,7 +358,97 @@ body::before {
   color: rgb(var(--color-text));
 }
 
-/* Utility Classes for Tailwind */
+/* Keyboard Shortcut Tooltip */
+.kbd-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: rgba(var(--color-border) / 0.2);
+  border: 1px solid rgba(var(--color-border) / 0.5);
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: monospace;
+  color: rgb(var(--color-text-secondary));
+}
+
+/* Sound Toggle Button */
+.sound-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid rgba(var(--color-border) / 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-in-out);
+  z-index: 40;
+}
+
+.sound-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.sound-toggle.enabled {
+  background: rgb(var(--color-primary));
+  color: white;
+}
+
+/* Enhanced Button Hover Effects */
+@layer utilities {
+  /* Button hover glow effect */
+  .button-glow {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .button-glow::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
+  .button-glow:hover::before {
+    left: 100%;
+  }
+
+  .button-glow:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Enhanced button states */
+  .button-enhanced {
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .button-enhanced:hover {
+    transform: translateY(-1px);
+  }
+
+  .button-enhanced:active {
+    transform: translateY(0);
+  }
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -277,6 +468,18 @@ body::before {
 
   .animate-scale-in {
     animation: scale-in var(--duration-base) var(--ease-out-expo) both;
+  }
+
+  .animate-float-particle {
+    animation: float-particle linear infinite;
+  }
+
+  .animate-bounce-in {
+    animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .animate-slide-hint {
+    animation: slide-hint var(--duration-base) var(--ease-out-expo);
   }
 
   /* Stagger animations for lists */
